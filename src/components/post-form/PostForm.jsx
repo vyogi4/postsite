@@ -1,17 +1,18 @@
 import React, { useCallback } from "react";
 import { useForm } from "react-hook-form";
-import { Button, Input, Select,Textarea } from "..";
+import { Button, Input, RTE, Select } from "..";
 import appwriteService from "../../appwrite/config";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 export default function PostForm({ post }) {
-    const { register, handleSubmit, watch, setValue, getValues } = useForm({
+    const { register, handleSubmit, watch, setValue, control, getValues } = useForm({
         defaultValues: {
             title: post?.title || "",
             slug: post?.$id || "",
             content: post?.content || "",
             status: post?.status || "active",
+            
         },
     });
 
@@ -20,8 +21,10 @@ export default function PostForm({ post }) {
 
     const submit = async (data) => {
         const userName = userData.name;
+        console.log(userName)
         if (post) {
             const file = data.image[0] ? await appwriteService.uploadFile(data.image[0]) : null;
+            
 
             if (file) {
                 appwriteService.deleteFile(post.featuredImage);
@@ -30,8 +33,9 @@ export default function PostForm({ post }) {
             const dbPost = await appwriteService.updatePost(post.$id, {
                 ...data,
                 featuredImage: file ? file.$id : undefined,
-                username: userName,
+                 username : userName,
             });
+            
 
             if (dbPost) {
                 navigate(`/post/${dbPost.$id}`);
@@ -42,7 +46,7 @@ export default function PostForm({ post }) {
             if (file) {
                 const fileId = file.$id;
                 data.featuredImage = fileId;
-                const dbPost = await appwriteService.createPost({ ...data, userId: userData.$id, username: userName });
+                const dbPost = await appwriteService.createPost({ ...data, userId: userData.$id , username : userName});
 
                 if (dbPost) {
                     navigate(`/post/${dbPost.$id}`);
@@ -82,14 +86,17 @@ export default function PostForm({ post }) {
                     {...register("title", { required: true })}
                 />
                 <Input
+                    // label="Slug :"
                     placeholder="Slug"
                     className="mb-4 hidden"
+
                     {...register("slug", { required: true })}
                     onInput={(e) => {
                         setValue("slug", slugTransform(e.currentTarget.value), { shouldValidate: true });
                     }}
                 />
-                <Input
+                    <Input
+                    // label="Featured Image :"
                     type="file"
                     className="mb-4"
                     accept="image/png, image/jpg, image/jpeg, image/gif"
@@ -97,7 +104,7 @@ export default function PostForm({ post }) {
                 />
                 {post && (
                     <div className="w-full mb-4">
-                        <p>{userData.name}</p>
+                        <p>{userName}</p>
                         <img
                             src={appwriteService.getFilePreview(post.featuredImage)}
                             alt={post.title}
@@ -105,22 +112,14 @@ export default function PostForm({ post }) {
                         />
                     </div>
                 )}
-                <Select
-                    options={["active", "inactive"]}
-                    label="Status"
-                    className="mb-4"
-                    {...register("status", { required: true })}
-                />
-                <Textarea
-                    className="w-full mb-4 p-2 border rounded"
-                    placeholder="Content"
-                    {...register("content", { required: true })}
-                    defaultValue={getValues("content")}
-                />
-                <Button type="submit" bgColor={post ? "bg-green-500" : undefined} className="w-full">
-                    {post ? "Update" : "Post"}
-                </Button>
+
+                <RTE label="Content :" name="content" control={control} defaultValue={getValues("content")} className="hidden" />
             </div>
+            {/* <div className="w-1/3 px-2">
+
+                
+                
+            </div> */}
         </form>
     );
 }
