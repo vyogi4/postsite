@@ -5,7 +5,7 @@ import Logo from "./Logo";
 import LogoutBtn from "./Header/LogoutBtn";
 import Button from "./Button";
 import  Input  from "./Input";
-import Textarea from "./RTE";
+import RTE from "./RTE";
 import Select from "./Select";
 import Signup from'./Signup'
 import Login from './Login'
@@ -23,7 +23,7 @@ export {
     
     Button,
     Input,
-    Textarea,
+    RTE,
     Select,
     Signup,
     Login,
