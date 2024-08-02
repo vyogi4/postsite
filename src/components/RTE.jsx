@@ -1,16 +1,55 @@
-import React from "react";
+import React from 'react'
+import {Editor } from '@tinymce/tinymce-react';
+import {Controller } from 'react-hook-form';
 
-const Textarea = ({ label, placeholder, ...props }) => {
-    return (
-        <div className="w-full mb-4">
-            {label && <label className="inline-block mb-1 pl-1">{label}</label>}
-            <textarea
-                className="w-full p-2 border rounded"
-                placeholder={placeholder}
-                {...props}
-            />
-        </div>
-    );
-};
 
-export default Textarea;
+export default function RTE({name, control, label, defaultValue =""}) {
+  return (
+    <div className='w-full'> 
+    {label && <label className='inline-block mb-1 pl-1'>{label}</label>}
+
+    <Controller
+    name={name || "content"}
+    control={control}
+    render={({field: {onChange}}) => (
+        <Editor
+        initialValue={defaultValue}
+        apiKey='ian2wuve8dib8h9awqb65kydi5ncx8dyc2g6g6u0lu6n9c5p'
+        init={{
+            initialValue: defaultValue,
+            height: 500,
+            menubar: true,
+            plugins: [
+                "image",
+                "advlist",
+                "autolink",
+                "lists",
+                "link",
+                "image",
+                "charmap",
+                "preview",
+                "anchor",
+                "searchreplace",
+                "visualblocks",
+                "code",
+                "fullscreen",
+                "insertdatetime",
+                "media",
+                "table",
+                "code",
+                "help",
+                "wordcount",
+                "anchor",
+            ],
+            toolbar:
+            "undo redo | blocks | image | bold italic forecolor | alignleft aligncenter bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent |removeformat | help",
+            content_style: "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }"
+        }}
+        onEditorChange={onChange}
+        />
+    )}
+    />
+
+     </div>
+  )
+}
