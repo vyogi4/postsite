@@ -78,11 +78,11 @@ export default function PostForm({ post }) {
 
     return (
         <form onSubmit={handleSubmit(submit)} className="flex flex-wrap justify-center">
-            <div className="w-2/3 px-2">
+            <div className="w-2/3  px-2">
                 <Input
                     label="Title :"
                     placeholder="Title"
-                    className="mb-4"
+                    className="mb-4  font-montserrat"
                     {...register("title", { required: true })}
                 />
                 <Input
@@ -102,24 +102,21 @@ export default function PostForm({ post }) {
                     accept="image/png, image/jpg, image/jpeg, image/gif"
                     {...register("image", { required: !post })}
                 />
-                {post && (
-                    <div className="w-full mb-4">
-                        <p>{userName}</p>
-                        <img
-                            src={appwriteService.getFilePreview(post.featuredImage)}
-                            alt={post.title}
-                            className="rounded-lg"
-                        />
-                    </div>
-                )}
-
-                <RTE label="Content :" name="content" control={control} defaultValue={getValues("content")} className="hidden" />
+                <Select
+                    options={["active", "inactive"]}
+                    label="Status"
+                    className="mb-4"
+                    {...register("status", { required: true })}
+                />
+                <div className="flex flex-wrap justify-center font-montserrat text-2xl">
+                <Button type="submit" bgColor={post ? "bg-green-500" : undefined} className="w-2/3">
+                    {post ? "Update" : "Post"}
+                </Button>
+                </div>
+                
+                {/* <RTE label="Content :" name="content" control={control} defaultValue={getValues("content")} /> */}
             </div>
-            {/* <div className="w-1/3 px-2">
 
-                
-                
-            </div> */}
         </form>
     );
 }
