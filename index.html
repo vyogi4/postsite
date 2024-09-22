@@ -5,6 +5,21 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>YogiHere</title>
+    <script>
+      // Prevent refresh with F5 or Ctrl+R
+      window.addEventListener('keydown', function (e) {
+        if ((e.key === 'F5') || (e.ctrlKey && e.key === 'r')) {
+          e.preventDefault();
+          alert("Refreshing the page is disabled.");
+        }
+      });
+
+      // Warn before leaving the page
+      window.addEventListener('beforeunload', function (e) {
+        e.preventDefault();
+        e.returnValue = ''; // Necessary for most modern browsers
+      });
+    </script>
   </head>
   <body class="bg-slate-400">
     <div id="root"></div>
